@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+groq
+python-dotenv
+python-multipart
+requests
+lxml
+sentence_transformers
+scikit-learn
+json
+re
+transformers
