@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Review</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    text-align:center;
+    width:400px;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    background:#4CAF50;
+    color:white;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#45a049;
+}
+
+.progress{
+    margin-top:20px;
+    width:100%;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    display:none;
+}
+
+.progress-bar{
+    height:20px;
+    width:0%;
+    background:#4CAF50;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>AI Polluks Review</h1>
+
+<input type="file" id="fileInput">
+<br><br>
+
+<button onclick="uploadFile()">Analyze</button>
+
+<div class="progress" id="progress">
+<div class="progress-bar" id="bar"></div>
+</div>
+
+</div>
+
+<script>
+
+function uploadFile(){
+
+    const fileInput = document.getElementById("fileInput")
+    const file = fileInput.files[0]
+
+    if(!file){
+        alert("Select file")
+        return
+    }
+
+    const formData = new FormData()
+    formData.append("file", file)
+
+    const progress = document.getElementById("progress")
+    const bar = document.getElementById("bar")
+
+    progress.style.display = "block"
+    bar.style.width = "10%"
+
+    fetch("/upload",{
+        method:"POST",
+        body:formData
+    })
+    .then(response => response.blob())
+    .then(blob =>{
+
+        bar.style.width = "100%"
+
+        const url = window.URL.createObjectURL(blob)
+
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "review.md"
+
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+
+        progress.style.display = "none"
+        bar.style.width = "0%"
+
+    })
+
+}
+
+</script>
+
+</body>
+</html>
